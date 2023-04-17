@@ -1,0 +1,19 @@
+// Variables
+@import 'variables';
+
+// Global styles
+@import './global';
+
+// Partials
+@import './partials/header';
+@import './partials/footer';
+@import './partials/aside';
+
+// Components
+
+// Pages
+@import './pages/home';
+
+body {
+    background-color: green;
+}
