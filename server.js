@@ -1,5 +1,7 @@
 // Load env variables
 import './utils/loadEnv.js';
+import { connectDB } from './utils/db.js';
+connectDB();
 
 // Express Setup
 import express from 'express';

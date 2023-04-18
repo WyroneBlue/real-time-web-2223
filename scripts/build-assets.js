@@ -16,3 +16,7 @@ const PUBLIC_ASSETS = [
 
 })
 
+
+(function() {
+    buildJS([`${RESOURCE_BASE}/manifest.json`], `${PUBLIC_BASE}/`, '.json');
+})
