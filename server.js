@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 io.on('connection', socket => {
+    console.log('a user connected');
     socket.on('join-chat', (name) => {
         socket.join(name);
     })
@@ -49,11 +50,15 @@ io.on('connection', socket => {
     socket.on('new-msg-sent', chat => {
         socket.to(chat.name).emit('new-msg', chat.msg);
     })
+
+    socket.on('chat-message', chat => {
+        io.emit('new-chat', chat);
+    })
 })
 
 // Use Routes
 app.use('/', routes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`);
 });
