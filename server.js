@@ -54,6 +54,11 @@ io.on('connection', socket => {
     socket.on('chat-message', chat => {
         io.emit('new-chat', chat);
     })
+
+    socket.on('new-order', order => {
+        console.log(order);
+        io.emit('new-order', order);
+    })
 })
 
 // Use Routes
