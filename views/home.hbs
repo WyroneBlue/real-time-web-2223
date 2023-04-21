@@ -1,17 +1,31 @@
-<ul id="messages"></ul>
+<h1>Order System</h1>
 
-<h1>Chat App</h1>
+<p>take a new order</p>
 
-<p>What is you name?</p>
+<form action="/order/save">
+    <section>
+        <section>
+            <h2>Drinks</h2>
+        </section>
+        <section>
+            <label for="coffee">
+                Coffee
+                <input type="checkbox" name="drink" value="coffee" id="coffee">
+            </label>
 
-<Label for="user">
-    Name:
-    <input type="text" id="user" name="user">
-</Label>
+            <label for="tea">
+                Tea
+                <input type="checkbox" name="drink" value="tea" id="tea">
+            </label>
+        </section>
+    </section>
 
-<form action="">
-    <label for="message">
-        Message:
-        <input type="text" name="message" id="message">
-    </label>
+    <input type="hidden" name="table" value="39">
+
+    <button type="submit">
+        Submit order
+    </button>
 </form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/order-form.js"></script>
