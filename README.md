@@ -11,6 +11,7 @@
       - [Join chat](#join-chat)
       - [Bericht versturen](#bericht-versturen)
       - [Bericht ontvangen](#bericht-ontvangen)
+    - [Toepassing](#toepassing)
     - [Bronnen](#bronnen)
 
 ## Socket.io
@@ -121,6 +122,9 @@ socket.on('new-msg', message => {
     }
 })
 ```
+
+### Toepassing
+Ik ga socket.io gebruiken om een restaurant order systeem te maken. Wanneer een host, runner of waiter een order plaatst, moet deze order direct zichtbaar zijn voor de keuken, zonder dat het scherm opnieuw geladen moet worden. Dit is dus een perfecte toepassing voor socket.io.
 
 ### Bronnen
 - https://socket.io/get-started/chat
