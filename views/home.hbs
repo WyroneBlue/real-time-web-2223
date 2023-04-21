@@ -1,22 +1,18 @@
-<h1>Order System</h1>
+<section>
+    <h1>Order System</h1>
 
-<p>take a new order</p>
+    <p>take a new order</p>
+</section>
 
 <form action="/order/save">
     <section>
         <section>
-            <h2>Drinks</h2>
+            <h2>Food</h2>
         </section>
         <section>
-            <label for="coffee">
-                Coffee
-                <input type="checkbox" name="drink" value="coffee" id="coffee">
-            </label>
-
-            <label for="tea">
-                Tea
-                <input type="checkbox" name="drink" value="tea" id="tea">
-            </label>
+            {{#each food }}
+                {{> orderInput title=name id=slug name=slug value=1 required=true price=price}}
+            {{/each }}
         </section>
     </section>
 
