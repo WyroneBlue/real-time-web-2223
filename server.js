@@ -1,7 +1,9 @@
 // Load env variables
 import './utils/loadEnv.js';
-import { connectDB } from './utils/db.js';
-connectDB();
+import { supabase } from './utils/db.js';
+// connectDB();
+
+// console.log(supabase);
 
 // Express Setup
 import express from 'express';
