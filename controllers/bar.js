@@ -4,7 +4,7 @@ export const index = async (req, res) => {
         title: "Orders"
     };
 
-    res.status(200).render('orders', {
+    res.status(200).render('bar', {
         page,
     });
 };
@@ -16,7 +16,7 @@ export const order = async (req, res) => {
         title: `Order: ${orderNumber}`
     };
 
-    res.status(200).render('home', {
+    res.status(200).render('bar/details', {
         page,
         orderNumber
     });
