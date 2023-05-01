@@ -10,7 +10,7 @@ socket.on('new-order', (data) => {
     let html = `<h3>Table: #${data.table}</h3>`;
 
     html += `<ul>`;
-    data.items.forEach(item => {
+    data.order.forEach(item => {
         console.log(item);
         html += `
         <li>

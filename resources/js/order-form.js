@@ -1,9 +1,11 @@
 console.log("Wagwan from order.js!");
 const socket = io();
 
+const param = new URLSearchParams(window.location.search);
+const tableId = param.get('table');
+
 const form = document.querySelector('form');
 const addButtons = document.querySelectorAll('form label button');
-console.log(addButtons);
 
 const submitButton = document.querySelector('form > button');
 
@@ -18,16 +20,16 @@ addButtons.forEach(button => {
         }, 1000);
 
         const input = e.target.closest('label').querySelector('input');
-
-        const isDuplicate = order.find(item => item.name === input.name);
+        const name = input.dataset.name;
+        const slug = input.name;
+        const isDuplicate = order.find(item => item.name === name);
         if(isDuplicate) {
             isDuplicate.quantity = parseInt(isDuplicate.quantity) + parseInt(input.value);
-            console.log('order', order);
-            return;
         } else {
             order.push({
-                name: input.name,
-                quantity: input.value
+                name,
+                slug,
+                quantity: parseInt(input.value)
             });
         }
         input.value = 1;
@@ -37,13 +39,25 @@ addButtons.forEach(button => {
     });
 });
 
+submitButton.addEventListener('click', async(e) => {
+    e.preventDefault();
+
+    submitButton.disabled = true;
+    setTimeout(() => {
+
+        submitButton.disabled = false;
+    }, 1000);
+
+    await submitOrder();
+});
+
 const submitOrder = async(e) => {
     // wait for order to save
     setTimeout(async () => {
         console.log('Order saved!');
         await socket.emit('new-order', {
             order,
-            table: 39
+            table: tableId
         });
     }, 1000);
 }
