@@ -1,12 +1,20 @@
 <label for="{{ id }}">
-    {{ title }}: €{{ price }}
-    <input
-        type="number"
-        name="{{ name }}"
-        id="{{ id }}"
-        value="{{ value }}"
-        min="1"
-    />
+    {{ title }}
+
+    <div>
+        <input
+            type="number"
+            name="{{ name }}"
+            id="{{ id }}"
+            value="{{ value }}"
+            min="1"
+            data-name="{{ title }}"
+        />
+
+        <span>
+            €{{ price }}
+        </span>
+    </div>
 
     <button> Add {{ title }}</button>
 </label>
