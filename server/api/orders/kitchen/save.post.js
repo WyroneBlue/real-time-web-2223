@@ -17,14 +17,14 @@ export default defineEventHandler(async (event) => {
         .select()
         .single();
 
-        const orderItems = order.map((item) => {
+        const orderItems = await Promise.all(order.map((item) => {
             return {
                 order_id: savedOrder.id,
                 menu_item_id: item.id,
                 price: item.price,
                 quantity: item.quantity,
             }
-        });
+        }));
 
         const { error: itemsError } = await supabase
         .from('order_menu_items')

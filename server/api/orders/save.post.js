@@ -21,7 +21,6 @@ export default defineEventHandler(async (event) => {
         }
 
         const foodOrder = order.filter((item) => item.menu_item_categories.slug !== 'drinks');
-        // console.log('foodOrder', foodOrder);
         if(foodOrder.length > 0) {
             const { error } = $fetch('/api/orders/kitchen/save', {
                 method: 'POST',
@@ -40,7 +39,6 @@ export default defineEventHandler(async (event) => {
         }
 
         const drinkOrder = order.filter((item) => item.menu_item_categories.slug === 'drinks');
-        // console.log('drinkOrder', drinkOrder);
         if(drinkOrder.length > 0) {
             const { error } = $fetch('/api/orders/bar/save', {
                 method: 'POST',
