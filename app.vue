@@ -1,5 +1,6 @@
 <template>
     <NuxtLayout>
+        <VitePwaManifest />
         <Transition name="page" mode="out-in">
             <div :key="$route.fullPath">
                 <NuxtPage />
