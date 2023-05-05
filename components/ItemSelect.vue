@@ -79,13 +79,15 @@ label {
 
     > div {
         display: flex;
-        width: 100%;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        gap: .25rem;
 
         span{
-            display: block;
-            width: 100%;
-            flex-grow: 1;
+            text-align: center;
+            &:first-of-type{
+                font-weight: bold;
+            }
         }
     }
 
