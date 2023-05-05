@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
         })
         .select()
         .single();
+        console.log('orderError kitchen', orderError);
 
         const orderItems = await Promise.all(order.map((item) => {
             return {
@@ -29,6 +30,7 @@ export default defineEventHandler(async (event) => {
         const { error: itemsError } = await supabase
         .from('order_menu_items')
         .insert(orderItems);
+        console.log('itemsError kitchen', itemsError);
 
         return {
             status: 200,
