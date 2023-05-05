@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
         const foodOrder = order.filter((item) => item.menu_item_categories.slug !== 'drinks');
         if(foodOrder.length > 0) {
-            const { error } = $fetch('/api/orders/kitchen/save', {
+            const { error } = await $fetch('/api/orders/kitchen/save', {
                 method: 'POST',
                 body: {
                     order: foodOrder,
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
 
         const drinkOrder = order.filter((item) => item.menu_item_categories.slug === 'drinks');
         if(drinkOrder.length > 0) {
-            const { error } = $fetch('/api/orders/bar/save', {
+            const { error } = await $fetch('/api/orders/bar/save', {
                 method: 'POST',
                 body: {
                     order: drinkOrder,
