@@ -4,7 +4,7 @@ const router = useRoute();
 const { table: tableNumber } = router.query;
 
 if (!tableNumber) {
-    navigateTo('/?table=#1');
+    navigateTo('/?table=1');
 }
 
 const props = defineProps({
