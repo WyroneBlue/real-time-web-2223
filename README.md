@@ -12,6 +12,7 @@
       - [Bericht versturen](#bericht-versturen)
       - [Bericht ontvangen](#bericht-ontvangen)
     - [Toepassing](#toepassing)
+    - [DB Design](#db-design)
     - [Bronnen](#bronnen)
 
 ## Socket.io
@@ -125,6 +126,56 @@ socket.on('new-msg', message => {
 
 ### Toepassing
 Ik ga socket.io gebruiken om een restaurant order systeem te maken. Wanneer een host, runner of waiter een order plaatst, moet deze order direct zichtbaar zijn voor de keuken, zonder dat het scherm opnieuw geladen moet worden. Dit is dus een perfecte toepassing voor socket.io.
+
+
+### DB Design
+```mermaid
+
+---
+title: DB Design
+---
+
+erDiagram
+
+menu_item_categories {
+    int id PK
+    varchar title
+    varchar slug
+}
+
+menu_items {
+    int id PK
+    id menu_item_category FK
+    varchar title
+    varchar slug
+    float price
+    varchar description
+    bool active
+}
+
+tables{
+    int id PK
+    varchar name
+    int seats
+}
+
+orders {
+    int id PK
+    int table_id FK
+    date order_date
+    varchar status
+    bool delivered
+}
+
+order_menu_items {
+    int id PK
+    int order_id FK
+    int menu_item_id FK
+    float price
+    int quantity
+}
+
+```
 
 ### Bronnen
 - https://socket.io/get-started/chat
