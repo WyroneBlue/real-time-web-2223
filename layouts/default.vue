@@ -1,5 +1,6 @@
 <template>
     <!-- header -->
+    <HeaderNav />
     <main>
         <slot />
     </main>
