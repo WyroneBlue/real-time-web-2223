@@ -27,6 +27,10 @@ onUnmounted(() => {
 });
 
 fetchOrders();
+
+definePageMeta({
+    middleware: 'auth'
+})
 </script>
 
 <template>
@@ -37,8 +41,3 @@ fetchOrders();
         intro="Meals to prepare"
     />
 </template>
-
-
-<style lang="scss" scoped>
-
-</style>
