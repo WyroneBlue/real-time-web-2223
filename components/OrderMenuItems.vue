@@ -22,7 +22,6 @@ const groupedOrders = computed(() => {
     const grouped = {};
 
     props.orders.forEach((order) => {
-        console.log(order);
         if (!grouped[order.status.slug]) {
             grouped[order.status.slug] = [];
         }
@@ -32,11 +31,6 @@ const groupedOrders = computed(() => {
 
     return grouped;
 });
-
-console.log(groupedOrders);
-
-
-
 </script>
 <template>
     <section :id="type">

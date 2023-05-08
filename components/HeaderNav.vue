@@ -1,4 +1,7 @@
 <script setup>
+const { auth } = useSupabaseAuthClient();
+const user = useSupabaseUser();
+console.log('user: ',user);
 const routes = [
     {
         name: 'Bar',
@@ -9,6 +12,11 @@ const routes = [
         path: '/orders/kitchen',
     },
 ];
+
+const logout = () => {
+    auth.signOut();
+    navigateTo('/');
+}
 </script>
 
 <template>
@@ -17,11 +25,16 @@ const routes = [
             <h1>Order System</h1>
         </RouterLink>
         <nav>
-            <ul>
+            <ul v-if="user">
                 <li v-for="route in routes" :key="route.name">
                     <RouterLink :to="route.path" :exact="true">
                         {{ route.name }}
                     </RouterLink>
+                </li>
+                <li>
+                    <button @click.prevent="logout">
+                        Logout
+                    </button>
                 </li>
             </ul>
         </nav>
@@ -58,6 +71,18 @@ header{
         ul{
             display: flex;
             gap: 1rem;
+
+            li{
+                &:last-child{
+                    padding-left: 1rem;
+                    border-left: 1px solid black;
+
+                    button {
+                        border: none;
+                        background-color: transparent;
+                    }
+                }
+            }
         }
     }
 }
