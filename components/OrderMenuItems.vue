@@ -43,9 +43,9 @@ console.log(groupedOrders);
         <h1>{{ Heading }} orders:</h1>
 
         <ClientOnly>
-            <OrderStatusList :orders="groupedOrders.preparing" statusTitle="Preparing" />
-            <OrderStatusList :orders="groupedOrders.ready" statusTitle="Ready" />
-            <OrderStatusList :orders="groupedOrders.delivered" statusTitle="Delivered" />
+            <OrderStatusList :orders="groupedOrders.preparing" statusTitle="Preparing" class="status preparing"/>
+            <OrderStatusList :orders="groupedOrders.ready" statusTitle="Ready" class="status ready"/>
+            <OrderStatusList :orders="groupedOrders.delivered" statusTitle="Delivered" class="status delivered"/>
         </ClientOnly>
     </section>
 </template>
@@ -60,6 +60,23 @@ section#kitchen {
 
     h1 {
         font-size: 2rem;
+    }
+
+    .status{
+        padding: .5rem;
+        border-radius: .5rem;
+
+        &.preparing {
+            background-color: lightsalmon;
+        }
+
+        &.ready {
+            background-color: lightyellow;
+        }
+
+        &.delivered {
+            background-color: lightgreen;
+        }
     }
 }
 </style>

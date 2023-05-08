@@ -10,7 +10,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits([ 'updateOrder', 'removeItem' ]);
+const emit = defineEmits(['removeItem' ]);
 
 const removeItem = (id) => {
     emit('removeItem', id);
@@ -28,18 +28,15 @@ const removeItem = (id) => {
                     <p>{{ item.title }}</p>
 
                     <section>
-                        <!-- <div>
-                            <button @click.prevent="updateQuantity('min')">-</button>
-                            <input type="number" :id="item.slug" v-model="item.quantity" min="1" />
-                            <button @click.prevent="updateQuantity('plus')">+</button>
-                        </div> -->
                         <p>{{ item.quantity }}</p>
 
-                        <button @click.prevent="removeItem(item.id)">delete</button>
+                        <button @click.prevent="removeItem(item.id)">
+                            🗑️
+                        </button>
                     </section>
 
                 </section>
-                <p>{{ item.note || 'no notes' }}</p>
+                <!-- <p>{{ item.note || 'no notes' }}</p> -->
             </li>
         </ul>
         <p v-else>No orders yet</p>
@@ -70,9 +67,32 @@ aside {
         flex-direction: column;
         gap: 1rem;
         li{
-            section{
+            > section{
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
+
+                section {
+                    display: flex;
+                    justify-content: end;
+                    align-items: center;
+                    gap: .5rem;
+
+                    p {
+                        width: 2rem;
+                        text-align: center;
+                    }
+
+                    button {
+                        display: grid;
+                        place-items: center;
+                        padding: .5rem;
+                        background-color: white;
+                        border: 2px solid black;
+                        border-radius: .5rem;
+                        aspect-ratio: 1/1;
+                    }
+                }
             }
         }
     }

@@ -133,7 +133,12 @@ watch(() => props.category, async (category) => {
                 <span>🧾</span>
             </button>
 
-            <OrderReview :showOrder="state.showOrder" :order="state.order" @removeItem="removeFromOrder" @hide-order="state.showOrder = $event" />
+            <OrderReview
+                :showOrder="state.showOrder"
+                :order="state.order"
+                @removeItem="removeFromOrder"
+                @hide-order="state.showOrder = $event"
+            />
         </section>
 
     </section>

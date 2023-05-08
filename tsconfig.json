@@ -7,5 +7,6 @@
   "exclude": [
     "node_modules",
     ".nuxt",
+    "old_version"
   ]
 }
