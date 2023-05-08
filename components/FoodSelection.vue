@@ -169,15 +169,19 @@ section {
                 section {
                     position: relative;
                     display: grid;
-                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-columns: 1fr;
                     overflow-x: hidden;
-                    gap: 2rem;
+                    gap: 1rem;
+
+                    @media screen and (min-width: 425px) {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
 
                     @media screen and (min-width: 640px) {
                         grid-template-columns: repeat(3, 1fr);
                     }
 
-                    @media screen and (min-width: 768px) {
+                    @media screen and (min-width: 800px) {
                         grid-template-columns: repeat(4, 1fr);
                     }
                 }

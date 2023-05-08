@@ -23,4 +23,7 @@ useHead({
 .router-link-exact-active.btn {
     color: white;
 }
+main{
+    padding-top: 60px;
+}
 </style>

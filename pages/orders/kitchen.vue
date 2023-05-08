@@ -26,10 +26,6 @@ onUnmounted(() => {
     client.removeChannel(state.channel)
 });
 
-const markReady = async (orderId) => {
-    console.log(`marking order ${orderId} as ready`);
-}
-
 fetchOrders();
 </script>
 

@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
         .from('orders')
         .select(`
             id,
-            status: order_states(name),
+            status: order_states(name, slug),
             menu_items: order_menu_items!inner(
                 note,
                 quantity,

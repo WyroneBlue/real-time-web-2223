@@ -7,12 +7,6 @@ const state = reactive({
 
 <template>
     <div>
-        <section>
-            <h1>Order System</h1>
-
-            <p>take a new order</p>
-        </section>
-
         <CategorySelection @setCategory="state.category = $event" />
         <FoodSelection :category="state.category" />
     </div>

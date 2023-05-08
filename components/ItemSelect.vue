@@ -83,15 +83,16 @@ label {
         align-items: center;
         gap: .25rem;
 
-        span{
+        span {
             text-align: center;
-            &:first-of-type{
+
+            &:first-of-type {
                 font-weight: bold;
             }
         }
     }
 
-    section{
+    section {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -99,7 +100,7 @@ label {
 
         div {
             display: grid;
-            grid-template-columns: 1fr 3fr 1fr;
+            grid-template-columns: 2fr 3fr 2fr;
             align-items: center;
             gap: .5rem;
 
@@ -108,23 +109,42 @@ label {
                 padding: .5em .5em;
                 text-align: center;
             }
+
+            button {
+                &:first-of-type {
+                    border-radius: .5rem 0 0 .5rem;
+                }
+
+                &:last-of-type {
+                    border-radius: 0 .5rem .5rem 0;
+                }
+            }
+        }
+
+        > button {
+            height: 40px;
+            border-radius: .5rem;
         }
     }
 
     button {
         display: block;
         width: 100%;
-        padding: .5em 1em;
+        padding: .5em 2em;
+        border: 1px solid black;
+        background-color: white;
     }
+
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 </style>

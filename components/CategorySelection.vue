@@ -34,6 +34,8 @@ section {
     position: sticky;
     top: 0;
     z-index: 1;
+    margin-top: -80px;
+    padding-top: 70px;
     background-color: lightblue;
 
     ul {
