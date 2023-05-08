@@ -27,13 +27,12 @@ const addItem = () => {
 const updateQuantity = (type) => {
     if (type === 'plus') {
         state.count++;
-    } else if(state.count > 1){
+    } else if (state.count > 1) {
         state.count--;
     }
 };
 
 watch(() => props.count, () => {
-    console.log('props.count changed');
     state.count = 1;
 });
 </script>
