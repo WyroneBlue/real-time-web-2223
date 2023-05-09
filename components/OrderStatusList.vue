@@ -9,6 +9,10 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    type: {
+        type: String,
+        default: null,
+    },
 });
 
 const updateStatus = async (orderId, status) => {
@@ -28,7 +32,7 @@ const updateStatus = async (orderId, status) => {
 <template>
     <section>
         <h2>{{ statusTitle }}</h2>
-        <ul id="orders" v-if="orders && orders.length > 0">
+        <ul id="orders" v-if="orders && orders.length > 0" :class="type">
             <TransitionGroup name="menu-items">
                 <li v-for="order in orders" :key="order.id">
                     <section>
@@ -81,7 +85,19 @@ ul#orders {
         grid-template-columns: repeat(4, 1fr);
     }
 
-    >li {
+    &.preparing li{
+        background-color: lightsalmon;
+    }
+
+    &.ready li{
+        background-color: lightyellow;
+    }
+
+    &.delivered li{
+        background-color: lightgreen;
+    }
+
+    > li {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -90,7 +106,7 @@ ul#orders {
         border: 1px solid black;
         border-radius: .5rem;
 
-        >section {
+        > section {
             display: flex;
             flex-direction: column;
             gap: .5rem;

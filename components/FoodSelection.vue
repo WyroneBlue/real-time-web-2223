@@ -104,7 +104,7 @@ watch(() => props.category, async (category) => {
                 </div>
 
                 <p v-if="state.foods && !state.foods.length">
-                    No menu items found for this category.
+                    There are currently no menu items in this category.
                 </p>
                 <ClientOnly v-else>
                     <TransitionGroup name="menu-items" tag="section">

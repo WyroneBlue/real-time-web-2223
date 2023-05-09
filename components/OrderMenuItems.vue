@@ -37,9 +37,9 @@ const groupedOrders = computed(() => {
         <h1>{{ Heading }} orders:</h1>
 
         <ClientOnly>
-            <OrderStatusList :orders="groupedOrders.preparing" statusTitle="Preparing" class="status preparing"/>
-            <OrderStatusList :orders="groupedOrders.ready" statusTitle="Ready" class="status ready"/>
-            <OrderStatusList :orders="groupedOrders.delivered" statusTitle="Delivered" class="status delivered"/>
+            <OrderStatusList :orders="groupedOrders.preparing" statusTitle="Preparing" type="preparing"/>
+            <OrderStatusList :orders="groupedOrders.ready" statusTitle="Ready" type="ready"/>
+            <OrderStatusList :orders="groupedOrders.delivered" statusTitle="Delivered" type="delivered"/>
         </ClientOnly>
     </section>
 </template>
@@ -54,23 +54,6 @@ section#kitchen {
 
     h1 {
         font-size: 2rem;
-    }
-
-    .status{
-        padding: .5rem;
-        border-radius: .5rem;
-
-        &.preparing {
-            background-color: lightsalmon;
-        }
-
-        &.ready {
-            background-color: lightyellow;
-        }
-
-        &.delivered {
-            background-color: lightgreen;
-        }
     }
 }
 </style>
