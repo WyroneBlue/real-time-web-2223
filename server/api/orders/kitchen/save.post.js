@@ -4,7 +4,6 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseClient(event);
 
     const { order, tableId } = await readBody(event);
-    console.log('kitchen order', order);
     try {
 
         const { data: savedOrder, error: orderError } = await supabase

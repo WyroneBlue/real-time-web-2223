@@ -14,7 +14,6 @@ export default defineEventHandler(async (event) => {
             data: categories
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

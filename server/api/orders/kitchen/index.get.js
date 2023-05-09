@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
         .eq('order_types.slug', 'kitchen')
         .order('created_at', { ascending: true })
 
-        console.log('error', error);
         return {
             status: 200,
             data: orders

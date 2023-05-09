@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseClient(event);
 
     const { order, tableNumber } = await readBody(event);
-    console.log('order', order);
+
     try {
 
         const { data: tableId } = await $fetch('/api/tables/number', {
