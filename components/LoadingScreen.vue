@@ -51,5 +51,6 @@ aside {
     opacity: 0;
     scale: 0;
     filter: blur(2px);
+    border-radius: 50%;
 }
 </style>
