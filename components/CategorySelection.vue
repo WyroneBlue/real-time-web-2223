@@ -20,6 +20,9 @@ const setActiveCategory = (slug) => {
         <ClientOnly v-if="!pending">
             <h2>Categories</h2>
             <ul>
+                <li @click="setActiveCategory(null)" :class="{ active: state.activeCategory === null }">
+                    All
+                </li>
                 <li v-for="category in state.categories" :key="category.id" @click="setActiveCategory(category.slug)" :class="{ active: state.activeCategory === category.slug }">
                     {{ category.title }}
                 </li>
