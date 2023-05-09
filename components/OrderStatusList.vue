@@ -26,7 +26,13 @@ const updateStatus = async (orderId, status) => {
         }),
     });
 
-    console.log(data, error);
+    if (error.value) {
+        useSetToast({
+            type: 'error',
+            msg: 'Failed to update order status',
+            duration: 5000
+        })
+    }
 }
 </script>
 <template>

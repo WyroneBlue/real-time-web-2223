@@ -1,4 +1,6 @@
 <script setup>
+import ToastMessage from '~/components/ToastMessage.vue';
+
 useHead({
     title: 'Restaurant Management',
     meta: [
@@ -8,11 +10,6 @@ useHead({
 
 const loading = ref(true);
 onMounted(() => {
-    setTimeout(() => {
-        console.log('loading done');
-        // loading.value = false;
-    }, 2000);
-
     loading.value = false;
 })
 </script>
@@ -24,6 +21,7 @@ onMounted(() => {
         <slot />
     </main>
     <LoadingScreen :loading="loading"/>
+    <ToastMessage />
 </template>
 
 <style scoped>

@@ -1,4 +1,9 @@
 <script setup>
+import { useOnline } from '@vueuse/core'
+
+const online = useOnline()
+const isOnline = computed(() => online.value)
+
 const props = defineProps({
     type: {
         type: String,
@@ -34,7 +39,10 @@ const groupedOrders = computed(() => {
 </script>
 <template>
     <section :id="type">
-        <h1>{{ Heading }} orders:</h1>
+        <div>
+            <h1>{{ Heading }} orders:</h1>
+            <p v-if="!isOnline">No internet connection<span>⚠️</span></p>
+        </div>
 
         <ClientOnly>
             <OrderStatusList :orders="groupedOrders.preparing" statusTitle="Preparing" type="preparing"/>
@@ -52,8 +60,22 @@ section#kitchen {
     gap: 1rem;
     padding: 1rem;
 
-    h1 {
-        font-size: 2rem;
+    div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-weight: bold;
+            span{
+                font-size: 2rem;
+            }
+        }
     }
 }
 </style>

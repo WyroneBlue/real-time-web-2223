@@ -2,6 +2,7 @@
     <main>
         <slot />
     </main>
+    <ToastMessage />
 </template>
 
 <script setup>

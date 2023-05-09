@@ -18,6 +18,7 @@
     "sass": "^1.62.1"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.21.0"
+    "@supabase/supabase-js": "^2.21.0",
+    "@vueuse/core": "^10.1.2"
   }
 }

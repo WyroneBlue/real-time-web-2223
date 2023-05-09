@@ -1,10 +1,11 @@
 <script setup>
+import { useSetToast } from '~/composables/toast';
+
 const client = useSupabaseAuthClient()
 
 const form = reactive({
     email: '',
     password: '',
-    error: '',
     loading: false,
 });
 
@@ -16,11 +17,16 @@ const login = async () => {
     });
 
     if (error) {
-        form.error = error.message;
+
+        useSetToast({
+            type: 'error',
+            msg: error.message,
+            duration: 5000
+        })
     } else {
-        form.loading = false;
         navigateTo('/');
     }
+    form.loading = false;
 }
 
 definePageMeta({
@@ -32,6 +38,7 @@ definePageMeta({
 <template>
     <section>
         <ClientOnly>
+            <h1>Login</h1>
             <form @submit.prevent="login">
                 <label for="email">
                     Email
@@ -49,6 +56,7 @@ definePageMeta({
                     <span v-else>Login</span>
                 </button>
             </form>
+
         </ClientOnly>
     </section>
 </template>
@@ -58,13 +66,17 @@ section {
     position: fixed;
     inset: 0;
 
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
 
     form {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        width: 300px;
 
         label {
             display: flex;
@@ -83,7 +95,25 @@ section {
             padding: .5rem 1rem;
             border-radius: .25rem;
         }
+
+        .error{
+            padding: .5rem 1rem;
+            background-color: red;
+            color: black;
+            border-radius: .25rem;
+        }
     }
 
+}
+
+.error-enter-active,
+.error-leave-active {
+    transition: opacity 0.3s, transform 0.5s;
+}
+
+.error-enter-from,
+.error-leave-to {
+    transform: translateY(10rem);
+    opacity: 0;
 }
 </style>

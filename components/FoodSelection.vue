@@ -1,5 +1,10 @@
 <script setup>
+import { useOnline } from '@vueuse/core'
 const router = useRoute();
+
+const online = useOnline()
+const isOnline = computed(() => online.value)
+console.log(isOnline)
 
 const { table: tableNumber } = router.query;
 
@@ -23,22 +28,30 @@ const state = reactive({
     count: 1,
 });
 
-const { data: menu_items } = await useFetch('/api/menu-items', {
-    key: 'menu-items',
-});
-state.foods = menu_items.value?.data;
-state.isLoading = false;
+const fetchFoods = async () => {
+    const { data: menu_items, error } = await useFetch('/api/menu-items', {
+        key: 'menu-items',
+    });
 
-const submitOrder = (event) => {
+    if(error.value) {
+        useSetToast({
+            type: 'error',
+            msg: 'Failed to load menu items. Please get in touch with the staff.'
+        })
+    }
+
+    state.foods = menu_items.value?.data;
+    state.isLoading = false;
+}
+
+const submitOrder = async (event = false) => {
+
+
     const button = event.target;
-
     button.disabled = true;
-    setTimeout(() => {
 
-        button.disabled = false;
-    }, 1000);
 
-    const { error, pending } = useFetch('/api/orders/save', {
+    const { error } = await useFetch('/api/orders/save', {
         method: 'POST',
         body: JSON.stringify({
             order: state.order,
@@ -46,11 +59,17 @@ const submitOrder = (event) => {
         }),
     });
 
-    if (error.value) {
-        console.log(error.value);
+    if (error.value || !isOnline.value) {
+        useSetToast({
+            type: 'error',
+            msg: !isOnline.value ? 'You are offline. Order will be submitted when you are online' : 'Order failed to submit. Please get in touch with the staff.'
+        })
     } else {
         state.order = [];
         state.count = 1;
+        useSetToast({
+            msg: 'Order submitted successfully'
+        })
     }
 }
 
@@ -81,6 +100,11 @@ const checkInOrder = (id) =>  state.order.find(item => item.id === id) ? true : 
 watch(() => props.category, async (category) => {
     state.isLoading = true;
 
+    if(!category) {
+        fetchFoods();
+        return;
+    };
+
     const { data: category_items, error } = await useFetch("/api/menu-items/category", {
         params: {
             category,
@@ -88,9 +112,35 @@ watch(() => props.category, async (category) => {
         key: 'category-items',
     });
 
+    if(error.value){
+        useSetToast({
+            type: 'error',
+            msg: `The menu items for ${category} could not be loaded. Please get in touch with the staff.`,
+            duration: 0
+        })
+    }
+
     state.foods = category_items.value?.data;
     state.isLoading = false;
 });
+
+watch(isOnline, (online) => {
+    if(online) {
+        useSetToast({
+            msg: 'You are online'
+        })
+
+        fetchFoods();
+    } else {
+        useSetToast({
+            type: 'error',
+            msg: 'You are offline. Order will be submitted when you are online',
+            duration: 0
+        })
+    }
+})
+
+fetchFoods();
 </script>
 
 <template>
@@ -100,14 +150,16 @@ watch(() => props.category, async (category) => {
                 <div>
                     <h2>Menu</h2>
 
-                    <LoadingSpinner v-if="state.isLoading" />
+                    <ClientOnly>
+                        <LoadingSpinner v-if="state.isLoading" />
+                    </ClientOnly>
                 </div>
 
-                <p v-if="state.foods && !state.foods.length">
-                    There are currently no menu items in this category.
-                </p>
-                <ClientOnly v-else>
-                    <TransitionGroup name="menu-items" tag="section">
+                <ClientOnly>
+                    <p v-if="state.foods && !state.foods.length">
+                        There are currently no menu items in this category.
+                    </p>
+                    <TransitionGroup name="menu-items" tag="section" v-else>
                         <ItemSelect
                             v-for="food in state.foods"
                             :key="food.id"
@@ -120,8 +172,20 @@ watch(() => props.category, async (category) => {
                 </ClientOnly>
             </section>
 
-            <button type="submit" @click.prevent="$event => submitOrder($event)" :class="{ sticky: state.order.length }">
+            <button v-if="!isOnline" disabled class="offline">
+                This device is offline
+                <span>Submitting an order is not possible</span>
+                <span>Please get in touch with the staff.</span>
+            </button>
+            <button
+                v-else
+                type="submit"
+                @click.prevent="$event => submitOrder($event)"
+                :class="{ sticky: state.order.length }"
+                :disabled="!state.order.length"
+            >
                 Submit order
+                <ToolTip v-if="!state.order.length" msg="No items selected"/>
             </button>
         </form>
 
@@ -200,10 +264,18 @@ section {
                 bottom: 1rem;
             }
 
+            &.offline{
+                background-color: var(--color-error);
+                color: var(--color-white);
+                border: none;
+
+                span {
+                    display: block;
+                }
+            }
+
             display: block;
             width: 100%;
-            max-width: 640px;
-            margin-inline: auto;
             padding: 1rem 2rem;
             border-radius: .5rem;
             font-weight: 700;
