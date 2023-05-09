@@ -47,8 +47,8 @@ watch(() => props.count, () => {
 
         <section>
             <div>
-                <button @click.prevent="updateQuantity('min')">-</button>
                 <input type="number" :id="item.slug" v-model="state.count" min="1" />
+                <button @click.prevent="updateQuantity('min')">-</button>
                 <button @click.prevent="updateQuantity('plus')">+</button>
             </div>
 
@@ -76,7 +76,7 @@ label {
     border: 1px solid black;
     border-radius: .5rem;
 
-    > div {
+    >div {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -99,28 +99,46 @@ label {
 
         div {
             display: grid;
-            grid-template-columns: 2fr 3fr 2fr;
+            grid-template-columns: repeat(2, 1fr);
+
+            @media screen and (max-width: 425px) {
+                display: flex;
+            }
+
             align-items: center;
             gap: .5rem;
 
             input {
+                grid-column: 1 / -1;
                 width: 100%;
                 padding: .5em .5em;
                 text-align: center;
+
+                @media screen and (max-width: 425px) {
+                    order: 2;
+                }
             }
 
             button {
                 &:first-of-type {
                     border-radius: .5rem 0 0 .5rem;
+
+                    @media screen and (max-width: 425px) {
+                        order: 1;
+                    }
                 }
 
                 &:last-of-type {
                     border-radius: 0 .5rem .5rem 0;
+
+                    @media screen and (max-width: 425px) {
+                        order: 3;
+                    }
                 }
             }
         }
 
-        > button {
+        >button {
             height: 40px;
             border-radius: .5rem;
         }

@@ -186,7 +186,7 @@ section {
                         grid-template-columns: repeat(3, 1fr);
                     }
 
-                    @media screen and (min-width: 800px) {
+                    @media screen and (min-width: 960px) {
                         grid-template-columns: repeat(4, 1fr);
                     }
                 }
