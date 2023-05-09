@@ -25,6 +25,7 @@ const login = async () => {
 
 definePageMeta({
     layout: "login",
+    middleware: "guest",
 });
 </script>
 
