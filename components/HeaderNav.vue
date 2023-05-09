@@ -1,7 +1,7 @@
 <script setup>
 const { auth } = useSupabaseAuthClient();
 const user = useSupabaseUser();
-console.log('user: ',user);
+
 const routes = [
     {
         name: 'Bar',
@@ -70,11 +70,11 @@ header{
     nav {
         ul{
             display: flex;
-            gap: 1rem;
+            gap: .5rem;
 
             li{
                 &:last-child{
-                    padding-left: 1rem;
+                    padding-left: .5rem;
                     border-left: 1px solid black;
 
                     button {
