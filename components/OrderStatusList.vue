@@ -16,9 +16,8 @@ const props = defineProps({
 });
 
 const updateStatus = async (orderId, status) => {
-    console.log(`marking order ${orderId} as ready`);
 
-    const { data, error } = await useFetch(`/api/orders/state`, {
+    const { error } = await useFetch(`/api/orders/state`, {
         method: 'PUT',
         body: JSON.stringify({
             status,

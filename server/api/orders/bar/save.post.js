@@ -4,7 +4,6 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseClient(event);
 
     const { order, tableId } = await readBody(event);
-    console.log('bar order', order);
     try {
 
         const { data: savedOrder, error: orderError } = await supabase
@@ -16,7 +15,6 @@ export default defineEventHandler(async (event) => {
         })
         .select()
         .single();
-        console.log('orderError bar', orderError);
 
         const orderItems = await Promise.all(order.map((item) => {
             return {
@@ -30,8 +28,6 @@ export default defineEventHandler(async (event) => {
         const { error: itemsError } = await supabase
         .from('order_menu_items')
         .insert(orderItems);
-
-        console.log('itemsError bar', itemsError);
 
         return {
             status: 200,

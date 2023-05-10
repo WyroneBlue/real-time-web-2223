@@ -4,7 +4,6 @@ const router = useRoute();
 
 const online = useOnline()
 const isOnline = computed(() => online.value)
-console.log(isOnline)
 
 const { table: tableNumber } = router.query;
 

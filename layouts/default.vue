@@ -1,6 +1,4 @@
 <script setup>
-import ToastMessage from '~/components/ToastMessage.vue';
-
 useHead({
     title: 'Restaurant Management',
     meta: [

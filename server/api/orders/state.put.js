@@ -11,16 +11,12 @@ export default defineEventHandler(async (event) => {
         .eq('slug', status)
         .single();
 
-        console.log('order_id', order_id);
-        console.log('orderStatus.id', orderStatus.id);
         const { data: order, error } = await supabase
         .from('orders')
         .update({ status_id: orderStatus.id })
         .eq('id', order_id)
         .select()
         .single();
-
-        console.log('order', order);
 
         return {
             status: 200,

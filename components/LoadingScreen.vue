@@ -24,10 +24,11 @@ aside {
     span {
         width: 100px;
         height: 100px;
-        border-radius: 30px;
-        border-top: 30px solid lightcoral;
-        border-bottom: 20px solid lightyellow;
+        border-radius: 35px 35px 20px 20px;
+        border-top: 30px solid lightyellow;
+        border-bottom: 25px solid lightyellow;
         animation: spin 1s ease-in-out infinite;
+        background-color: lightcoral;
     }
 }
 

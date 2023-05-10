@@ -15,7 +15,6 @@ onMounted(() => {
     state.channel = client.channel('public:orders')
         .on('postgres_changes',
             { event: '*', schema: 'public', table: 'orders' },
-            // () => refreshOrders()
             () => fetchOrders()
         )
         .subscribe();
