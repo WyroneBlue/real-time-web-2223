@@ -3,6 +3,13 @@
 ## Table of Contents
 - [Real-Time Web 2022 - 2023](#real-time-web-2022---2023)
   - [Table of Contents](#table-of-contents)
+  - [Demo](#demo)
+  - [Installation](#installation)
+    - [Clone](#clone)
+    - [Setup](#setup)
+    - [API](#api)
+    - [Development Server](#development-server)
+    - [Production](#production)
   - [Restaurant Order App](#restaurant-order-app)
     - [Nuxt 3](#nuxt-3)
     - [Backend](#backend)
@@ -28,6 +35,76 @@
     - [Login](#login)
   - [Bronnen](#bronnen)
 
+## Demo
+The demo can be found [here](https://real-time-web.netlify.app/).
+Some pages need authentication to be viewed.
+
+You can login on page `/login`.
+The login credentials are:
+- email: `admin@food.nl`
+- password: `test123`
+
+## Installation
+
+### Clone
+The first step is to clone this repository:
+
+```bash
+git clone https://github.com/WyroneBlue/real-time-web-2223.git
+cd real-time-web-2223
+```
+
+### Setup
+
+Make sure to install the dependencies with your favorite package manager:
+
+```bash
+# yarn
+yarn install
+
+# npm
+npm install
+
+# pnpm
+pnpm install --shamefully-hoist
+```
+
+### API
+After installing all the dependencies you need to create an account on [supabase](https://supabase.com). After you created an account you need to create a project. After you created a project you need to go to the settings of your project and go to the `API` tab. In this tab you can find the `URL` and `Key` of your project.
+![supabase api](./docs/supabase/api.png)
+You need to copy these values and create a `.env` file in the root of the project. In this file you need to add the following values:
+
+```env
+SUPABASE_URL=[past url here]
+SUPABASE_KEY=[past key here]
+```
+
+!!! note ENV
+    You van copy the .env.example file and rename it to .env and the fields will already be there
+
+### Development Server
+
+Start the development server on http://localhost:3000
+
+```bash
+npm run dev
+```
+
+### Production
+
+Build the application for production:
+
+```bash
+npm run build
+```
+
+Locally preview production build:
+
+```bash
+npm run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
 ## Restaurant Order App
 For this course I'm going to make a restaurant order app. The idea is that you can order food from your table and that the people in the kitchen and the bar can see the order popup on their screen in real time. The staff(waiter/kitchen/bar) can also change the status of the order. The application also has authentication, so that only the staff can see the orders and change the status of the orders.
