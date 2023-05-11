@@ -45,10 +45,8 @@ const fetchFoods = async () => {
 
 const submitOrder = async (event = false) => {
 
-
     const button = event.target;
     button.disabled = true;
-
 
     const { error } = await useFetch('/api/orders/save', {
         method: 'POST',
@@ -155,11 +153,12 @@ fetchFoods();
                 </div>
 
                 <ClientOnly>
-                    <p v-if="state.foods && !state.foods.length">
-                        There are currently no menu items in this category.
-                    </p>
-                    <TransitionGroup name="menu-items" tag="section" v-else>
+                    <TransitionGroup name="menu-items" tag="section">
+                        <p v-if="state.foods && !state.foods.length">
+                            There are currently no menu items in this category.
+                        </p>
                         <ItemSelect
+                            v-else
                             v-for="food in state.foods"
                             :key="food.id"
                             :item="food"
