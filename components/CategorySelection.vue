@@ -6,13 +6,14 @@ const state = reactive({
     categories: null,
 });
 
-const { pending, data } = useFetch('/api/menu-items/categories');
+const { data, pending } = await useFetch('/api/menu-items/categories');
 state.categories = data.value?.data;
 
 const setActiveCategory = (slug) => {
     state.activeCategory = slug;
     emit('setCategory', slug);
 }
+
 </script>
 
 <template>
