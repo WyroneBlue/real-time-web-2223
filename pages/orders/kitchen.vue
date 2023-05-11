@@ -13,12 +13,11 @@ const fetchOrders = async () => {
 
 onMounted(() => {
     state.channel = client.channel('public:orders')
-        .on('postgres_changes',
-            { event: '*', schema: 'public', table: 'orders' },
-            () => fetchOrders()
-        )
-        .subscribe();
-
+    .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'orders' },
+        () => fetchOrders()
+    )
+    .subscribe();
 });
 
 onUnmounted(() => {

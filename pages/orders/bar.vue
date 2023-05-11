@@ -18,7 +18,6 @@ onMounted(() => {
     () => fetchOrders()
     )
     .subscribe();
-
 });
 
 onUnmounted(() => {
