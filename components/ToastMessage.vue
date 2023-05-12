@@ -23,7 +23,7 @@ watch(toast, (value) => {
             </p>
 
             <button @click="closeToast">
-                ❌
+                Close
             </button>
         </section>
     </Transition>
@@ -35,7 +35,7 @@ section{
     bottom: 0;
     inset-inline: 0;
     height: 5rem;
-    padding: 1rem;
+    padding: .5rem;
     background-color: lightcoral;
     border: 1px solid #12b488;
 
@@ -56,8 +56,10 @@ section{
         height: 100%;
         width: auto;
         aspect-ratio: 1/1;
-        border-radius: .25rem;
-        font-size: large;
+        padding: 0.5rem;
+        border-radius: 50%;
+        font-size: 1rem;
+        font-weight: bold;
     }
 }
 
