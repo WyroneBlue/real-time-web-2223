@@ -4,6 +4,8 @@
 - [Real-Time Web 2022 - 2023](#real-time-web-2022---2023)
   - [Table of Contents](#table-of-contents)
   - [Demo](#demo)
+    - [Tables](#tables)
+    - [Authentication](#authentication)
   - [Installation](#installation)
     - [Clone](#clone)
     - [Setup](#setup)
@@ -14,8 +16,8 @@
     - [Nuxt 3](#nuxt-3)
     - [Backend](#backend)
       - [Supabase](#supabase)
-      - [Authentication](#authentication)
-      - [Tables](#tables)
+      - [Authentication](#authentication-1)
+      - [Tables](#tables-1)
       - [Realtime](#realtime)
       - [API routes](#api-routes)
       - [Queries](#queries)
@@ -37,6 +39,20 @@
 
 ## Demo
 The demo can be found [here](https://real-time-web.netlify.app/).
+
+### Tables
+When visiting the link above you will automatically be redirected to table 1.
+
+But you can also visit the other tables by scanning these qr codes:
+| Table | Link |
+| ----- | ---- |
+| 1     | ![table 1](./docs/results/tables/1.png)  |
+| 2     | ![table 2](./docs/results/tables/2.png)  |
+| 6     | ![table 6](./docs/results/tables/6.png)  |
+| 10    | ![table 10](./docs/results/tables/10.png) |
+
+
+### Authentication
 Some pages need authentication to be viewed.
 
 You can login on page `/login`.
