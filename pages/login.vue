@@ -4,8 +4,8 @@ import { useSetToast } from '~/composables/toast';
 const client = useSupabaseAuthClient()
 
 const form = reactive({
-    email: '',
-    password: '',
+    email: null,
+    password: null,
     loading: false,
 });
 
@@ -39,16 +39,16 @@ definePageMeta({
     <section>
         <ClientOnly>
             <h1>Login</h1>
-            <form @submit.prevent="login">
+            <form @submit.prevent="login" autocomplete="off">
                 <label for="email">
                     Email
-                    <input type="email" id="email" v-model="form.email" placeholder="Email" required />
+                    <input type="email" id="email" v-model="form.email" placeholder="Email" required onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly', true);" autocomplete="email"/>
                 </label>
 
 
                 <label for="password">
                     Password
-                    <input type="password" id="password" v-model="form.password" placeholder="Password" required />
+                    <input type="password" id="password" v-model="form.password" placeholder="Password" required onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly', true);" autocomplete="current-password"/>
                 </label>
 
                 <button type="submit" :disabled="form.loading">
@@ -88,6 +88,12 @@ section {
                 border: 1px solid #ccc;
                 border-radius: 0.25rem;
             }
+
+            div {
+                display: none;
+                height: 0;
+            }
+
         }
 
         button {
