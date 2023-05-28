@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
             data: tableId
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

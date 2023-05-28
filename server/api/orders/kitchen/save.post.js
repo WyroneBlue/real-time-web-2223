@@ -33,10 +33,9 @@ export default defineEventHandler(async (event) => {
 
         return {
             status: 200,
-            data: 'Bar order saved'
+            data: 'Kitchen order saved'
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

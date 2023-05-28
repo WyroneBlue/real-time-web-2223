@@ -30,8 +30,6 @@ export default defineEventHandler(async (event) => {
                 }
             });
 
-            console.log('food error in save', error);
-
             if(error) {
                 throw createError({
                     statusCode: 500,
@@ -50,8 +48,6 @@ export default defineEventHandler(async (event) => {
                 }
             });
 
-            console.log('drink error in save', error);
-
             if(error) {
                 throw createError({
                     statusCode: 500,
@@ -65,7 +61,6 @@ export default defineEventHandler(async (event) => {
             data: 'Orders saved'
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

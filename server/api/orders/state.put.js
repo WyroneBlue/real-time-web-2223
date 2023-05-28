@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
             data: 'Bar order saved'
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

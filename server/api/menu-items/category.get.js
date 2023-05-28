@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
             data: menu_items
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error

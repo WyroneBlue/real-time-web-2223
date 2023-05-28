@@ -25,13 +25,11 @@ export default defineEventHandler(async (event) => {
         .eq('order_types.slug', 'bar')
         .order('created_at', { ascending: true })
 
-        console.log('error', error);
         return {
             status: 200,
             data: orders
         };
     } catch (error) {
-        console.log(error);
         return {
             status: 500,
             data: error
