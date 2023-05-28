@@ -12,13 +12,15 @@
     - [API](#api)
     - [Development Server](#development-server)
     - [Production](#production)
-  - [Restaurant Order App](#restaurant-order-app)
+  - [Restaurant Order App: Update](#restaurant-order-app-update)
     - [Nuxt 3](#nuxt-3)
     - [Backend](#backend)
       - [Supabase](#supabase)
       - [Authentication](#authentication-1)
       - [Tables](#tables-1)
+      - [Data life cycle: Update](#data-life-cycle-update)
       - [Realtime](#realtime)
+      - [Realtime: Update](#realtime-update)
       - [API routes](#api-routes)
       - [Queries](#queries)
       - [Middleware](#middleware)
@@ -29,11 +31,15 @@
       - [Reusable components](#reusable-components)
       - [OrderMenuItems](#ordermenuitems)
       - [Toast](#toast)
-      - [Realtime Channel](#realtime-channel)
+      - [Realtime events](#realtime-events)
+      - [Realtime events: Update](#realtime-events-update)
+        - [Eventlist](#eventlist)
   - [Results](#results)
     - [Loading screen](#loading-screen)
     - [Home](#home)
+    - [Home: Update](#home-update)
     - [Orders: Kitchen/Bar](#orders-kitchenbar)
+    - [Orders: Kitchen/Bar: Update](#orders-kitchenbar-update)
     - [Login](#login)
   - [Bronnen](#bronnen)
 
@@ -122,10 +128,18 @@ npm run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-## Restaurant Order App
+## Restaurant Order App: Update
 For this course I'm going to make a restaurant order app. The idea is that you can order food from your table and that the people in the kitchen and the bar can see the order popup on their screen in real time. The staff(waiter/kitchen/bar) can also change the status of the order. The application also has authentication, so that only the staff can see the orders and change the status of the orders.
 
-To create this application i will be using a fullstack framework called [nuxt](https://nuxt.com), which will be responsible for the views and (api)routes and listening for real time events, and a postgres database called [supabase](https://supabase.com) which will be responsible for saving the orders, users and other data.
+Visitors will be able to scan a qr code to go to the correct table to make orders. These qr codes can also be found [here](#Tables). After they land on the table of the scanned qr code they will see a list of items they can choose from. When they click the plus sign the item will be added to their order.
+
+When adding an item to the order the order overview, that can be accessed in the bottom right corner, will show the items you added an the quantity. You can also remove items from the order overview by clicking the minus sign. When you are done with your order you can click the `submit order` button and the order will be send to the kitchen and the bar.
+
+The order overview pages also have a list of all the tables that are currently active realtime! This means that when the order page for a table has been inactive for a certain amount of time(for this demo only 5 seconds) the table in the list will be set to inactive and a `last_seen` timestamp will be added to the table in the format of `HH:mm:ss`.
+
+The results of this project can be found [here](#results).
+
+To create this application i used a fullstack framework called [nuxt](https://nuxt.com), which will be responsible for the views and (api)routes and listening for real time events, and a postgres database called [supabase](https://supabase.com) which will be responsible for saving the orders, users and other data.
 
 ### Nuxt 3
 The reason why i chose to use nuxt 3 is because it's a fullstack framework. It has a frontend and a backend. The frontend is build with vue and the backend is build with node like server called nitro. This means that i can use the same language for both the frontend and the backend.
@@ -199,8 +213,17 @@ order_states {
 
 ```
 
+#### Data life cycle: Update
+The data life cycle of the application is going to be like this:
+![data life cycle](./docs/data-life-cycle.jpg)
+
 #### Realtime
 To enable realtime events you have to go to the `Realtime` tab in the settings. In this tab you can enable the realtime events.
+
+#### Realtime: Update
+To see how realtime is implemented in this application you can go to [Realtime events](#realtime-events)
+
+
 
 ![supabase realtime](./docs/supabase/activate-realtime.png)
 
@@ -431,7 +454,7 @@ const fetchFoods = async () => {
 </script>
 ```
 
-#### Realtime Channel
+#### Realtime events
 
 !!! warning Enable Realtime
     Before setting up the realtime channel, make sure the realtime option is enabled like [shown here](#realtime)
@@ -441,17 +464,13 @@ When you want to actively listen to changes in your database you can use the `ch
 For example:
 ```js
 
-<script setup>
 const client = useSupabaseClient()
 const state = reactive({
     orders: [],
     channel: null,
 });
 
-const fetchOrders = async () => {
-    const { data } = await useFetch('/api/orders/bar');
-    state.orders = data.value?.data;
-};
+const fetchOrders = async () => // fetch items
 
 onMounted(() => {
     state.channel = client.channel('public:orders')
@@ -462,15 +481,79 @@ onMounted(() => {
         .subscribe();
 
 });
-
-onUnmounted(() => {
-    client.removeChannel(state.channel)
-});
 </setup>
 ```
 
 !!! warning Leave channel
     Make sure to also leave the channel when the component is unmounted.
+    ```js
+    onUnmounted(() => {
+        client.removeChannel(state.channel)
+    });
+    ```
+
+#### Realtime events: Update
+When you want to listen to events between pages there are 2 things you have to do.
+
+To create a channel you have to use the `channel` function. which is provided by the `useSupabaseClient` function. After creating a channel and subscribing to it, you can send and listen to events.
+
+This is an example of how i implemented the custom events to check which tables are active or not:
+```js
+// Page 1: Order page
+
+// create client
+const client = useSupabaseClient()
+
+// create channel
+state.channels.active_tables = client.channel('active_tables')
+.subscribe(() => { // subscribe
+    console.log('subscribed to active_tables')
+})
+
+// Check if idle
+if (idle) {
+    const HoursMinutesSeconds = // get current time
+    state.channels.active_tables.send({
+        type: 'broadcast',
+        event: 'table_update',
+        payload: {
+            tableNumber,
+            status: 'idle',
+            last_seen: HoursMinutesSeconds,
+        }
+    })
+} else {
+    // send is active
+}
+```
+
+
+```js
+// Page 2: Kitchen page
+
+state.channels.active_tables = client.channel('active_tables', {
+    configs: {
+        presence: {
+            key: `kitchen staff`
+        }
+    }
+})
+.on('broadcast', { event: 'table_update' }, ({ payload }) => {
+    // update table status
+})
+.subscribe();
+```
+
+!!! warning Note
+    Please note that the code examples above are not the complete code. I only show the important parts of the code.
+
+
+##### Eventlist
+| Event | channel | Description |
+| ----- | ----------- | ----------- |
+| `table_update` | `active_tables` | This event is used to update the table status. When a table is idle, the kitchen staff will see the table number and the time when the table was last seen. When a table is active, the kitchen staff will see the table number and the time when the table was last seen. |
+| `new-order` | `bar-orders`, `kitchen-orders` | This event is used to receive new orders. When an order is placed, the bar staff will see the order number and the time when the order was placed. The last saved order will be send from the server as payload and will be added to the orders array. |
+| `status-update-bar`, `status-update-kitchen` | `order-status` |  This event is used to receive updates for when a order status has changed. The order status info will be send from the server and the correct order will be updated in the orders array. |
 
 ## Results
 
@@ -485,6 +568,11 @@ onUnmounted(() => {
 | ------- | --------------| ----------- |
 | ![Home](./docs/results/home/initial.png) | ![Home](./docs/results/home/loading-items.png) | ![Home](./docs/results/home/item-picked.png) |
 
+### Home: Update
+| Idle |
+| ---- |
+| ![Home](./docs/results/home/idle.png) |
+
 
 | Order success | No connection |
 | ------------- | ----------- |
@@ -495,6 +583,11 @@ onUnmounted(() => {
 | Initial | Orders loaded | No connection |
 | ------- | --------------| ------------- |
 | ![Orders](./docs/results/orders/empty-state.png) | ![Orders](./docs/results/orders/orders-loaded.png) | ![Orders](./docs/results/orders/no-connection.png) |
+
+### Orders: Kitchen/Bar: Update
+| Tables inactive | Has active tables | Last seen |
+| --------------- | ----------------- | --------- |
+| ![Orders](./docs/results/orders/inactive-tables.png) | ![Orders](./docs/results/orders/has-active-tables.png) | ![Orders](./docs/results/orders/last-seen.png) |
 
 
 ### Login
