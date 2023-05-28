@@ -1,11 +1,14 @@
 <script setup>
-import { useOnline } from '@vueuse/core'
+import { useOnline, useIdle } from '@vueuse/core'
+const client = useSupabaseClient()
+
 const router = useRoute();
+const { table: tableNumber } = router.query;
 
 const online = useOnline()
 const isOnline = computed(() => online.value)
-
-const { table: tableNumber } = router.query;
+// const { idle } = useIdle(1000 * 5 * 60);
+const { idle } = useIdle(1000 * 5);
 
 if (!tableNumber) {
     navigateTo('/?table=1');
@@ -20,12 +23,39 @@ const props = defineProps({
 
 const state = reactive({
     foods: [],
-    order: [],
+    order: useOrder(),
     category: props.category,
     isLoading: true,
     showOrder: false,
-    count: 1,
+    count: 0,
+    channels: {
+        orders: null,
+        active_tables: null,
+    },
 });
+
+onMounted(() => {
+    state.channels.orders = client.channel('new_orders')
+    .subscribe(() => {
+        console.log('subscribed to new_orders')
+    })
+
+    state.channels.active_tables = client.channel('active_tables', {
+        configs: {
+            presence: {
+                key: `table-${tableNumber}`
+            }
+        }
+    })
+    .subscribe(() => {
+        console.log('subscribed to active_tables')
+    })
+});
+
+onUnmounted(() => {
+    client.removeChannel(state.channels.orders);
+    client.removeChannel(state.channels.active_tables)
+})
 
 const fetchFoods = async () => {
     const { data: menu_items, error } = await useFetch('/api/menu-items', {
@@ -70,29 +100,16 @@ const submitOrder = async (event = false) => {
     }
 }
 
+const checkInOrder = (id) => useOrder().value.find(item => item.id === id) ? true : false;
 const addToOrder = (event) => {
-    const isDuplicate = state.order.find(item => item.id === event.item.id);
 
-    if (isDuplicate) {
-        state.order = state.order.map(item => {
-            if (item.id === event.item.id) {
-                item.quantity = parseInt(event.count);
-            }
-            return item;
-        })
+    const isDuplicate = checkInOrder(event.item.id);
+    if(isDuplicate) {
+        updateOrderQuantity(event.item.id, event.count);
     } else {
-        state.order.push({
-            ...event.item,
-            quantity: parseInt(event.count)
-        })
+        updateOrder(event.item, event.count);
     }
 }
-
-const removeFromOrder = (id) => {
-    state.order = state.order.filter(item => item.id !== id);
-}
-
-const checkInOrder = (id) =>  state.order.find(item => item.id === id) ? true : false;
 
 watch(() => props.category, async (category) => {
     state.isLoading = true;
@@ -134,6 +151,39 @@ watch(isOnline, (online) => {
             msg: 'You are offline. Order will be submitted when you are online',
             duration: 0
         })
+    }
+})
+
+watch(idle, (idleValue) => {
+    if (idleValue) {
+        const date = new Date();
+        const HoursMinutesSeconds = date.toLocaleTimeString('nl-NL', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        state.channels.active_tables.send({
+            type: 'broadcast',
+            event: 'table_update',
+            payload: {
+                tableNumber,
+                status: 'idle',
+                last_seen: HoursMinutesSeconds,
+            }
+        })
+
+        useSetToast({
+            type: 'warning',
+            msg: "You have not ordered anything for a while. Are you finished ordering?",
+            duration: 0
+        })
+    } else {
+        state.channels.active_tables.send({
+            type: 'broadcast',
+            event: 'table_update',
+            payload: {
+                tableNumber,
+                status: 'active'
+            }
+        })
+
+        clearToast();
     }
 })
 
@@ -197,8 +247,6 @@ fetchFoods();
 
             <OrderReview
                 :showOrder="state.showOrder"
-                :order="state.order"
-                @removeItem="removeFromOrder"
                 @hide-order="state.showOrder = $event"
             />
         </section>
@@ -234,6 +282,7 @@ section {
                 }
 
                 section {
+                    min-height: 500px;
                     position: relative;
                     display: grid;
                     grid-template-columns: 1fr;

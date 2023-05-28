@@ -48,6 +48,10 @@ section{
         background-color: lightgreen;
     }
 
+    &.warning {
+        background-color: lightyellow;
+    }
+
     &.error {
         background-color: lightcoral;
     }

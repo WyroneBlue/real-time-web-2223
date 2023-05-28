@@ -1,4 +1,5 @@
 <script setup>
+
 const emit = defineEmits([ 'addItem' ]);
 const props = defineProps({
     item: {
@@ -7,7 +8,7 @@ const props = defineProps({
     },
     count: {
         type: Number,
-        default: 1,
+        default: 0,
     },
     inOrder: {
         type: Boolean,
@@ -20,47 +21,54 @@ const state = reactive({
     count: props.count,
 });
 
-const addItem = () => {
-    emit('addItem', state);
-};
-
 const updateQuantity = (type) => {
+
     if (type === 'plus') {
         state.count++;
-    } else if (state.count > 1) {
+    } else if (state.count > 0) {
         state.count--;
+    }
+
+    if(state.count === 0 && type === 'min') {
+        removeItemById(state.item.id);
+    } else {
+        emit('addItem', state);
     }
 };
 
 watch(() => props.count, () => {
-    state.count = 1;
+    state.count = 0;
 });
 </script>
 
 <template>
-    <label :for="item.slug">
+    <label :for="item.slug" :class="{ 'in-order': props.inOrder }">
 
         <div>
             <span>{{ item.title }}</span>
-            <span>€{{ item.price }}</span>
+            <span>€{{ item.price.toFixed(2) }}</span>
         </div>
 
         <section>
             <div>
                 <input type="number" :id="item.slug" v-model="state.count" min="1" />
-                <button @click.prevent="updateQuantity('min')">-</button>
+                <button
+                    @click.prevent="updateQuantity('min')"
+                    :disabled="state.count === 0"
+                >-</button>
                 <button @click.prevent="updateQuantity('plus')">+</button>
             </div>
-
-            <button @click.prevent="addItem">
-                {{ inOrder ? 'Update quantity' : 'Add to order' }}
-            </button>
         </section>
     </label>
 </template>
 
 <style lang="scss" scoped>
 label {
+
+    &.in-order {
+        background-color: lightgreen;
+        border-color: darkgreen;
+    }
 
     &:first-of-type {
         border-radius: 0 .5rem .5rem;
@@ -73,7 +81,7 @@ label {
     gap: 1rem;
     padding: 1rem;
     background-color: lightyellow;
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: .5rem;
 
     >div {
@@ -120,6 +128,11 @@ label {
             }
 
             button {
+
+                &:disabled{
+                    opacity: .5;
+                }
+
                 &:first-of-type {
                     border-radius: .5rem 0 0 .5rem;
 
@@ -138,7 +151,7 @@ label {
             }
         }
 
-        >button {
+        > button {
             height: 40px;
             border-radius: .5rem;
         }
@@ -150,8 +163,8 @@ label {
         padding: .5em 2em;
         border: 1px solid black;
         background-color: white;
+        font-weight: 700;
     }
-
 }
 
 input::-webkit-outer-spin-button,

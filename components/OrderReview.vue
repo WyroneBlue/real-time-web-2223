@@ -1,20 +1,30 @@
 <script setup>
+const order = useOrder();
 const props = defineProps({
-    order: {
-        type: Array,
-        default: [],
-    },
     showOrder: {
         type: Boolean,
         default: false,
     },
 });
 
-const emit = defineEmits(['removeItem' ]);
+const emit = defineEmits(['removeItem', 'hideOrder']);
 
 const removeItem = (id) => {
+    removeItemById(id);
     emit('removeItem', id);
 };
+
+watch(() => order.value, () => {
+    console.log(order.value);
+});
+
+watch(() => props.showOrder, () => {
+    if (props.showOrder && !order.value.length > 0) {
+        setTimeout(() => {
+            emit('hideOrder');
+        }, 4000);
+    }
+});
 </script>
 
 <template>
@@ -22,8 +32,8 @@ const removeItem = (id) => {
 
         <h2>Order</h2>
 
-        <ul v-if="props.order.length > 0">
-            <li v-for="item in props.order" :key="item.id">
+        <ul v-if="order.length > 0">
+            <li v-for="item in order" :key="item.id">
                 <section>
                     <p>{{ item.title }}</p>
 
